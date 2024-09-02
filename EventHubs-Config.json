@@ -1,0 +1,27 @@
+{
+    "UserConfig": {
+        "NamespaceConfig": [
+            {
+                "Type": "EventHub",
+                "Name": "emulatorns1",
+                "Entities": [
+                    {
+                        "Name": "defaultevents",
+                        "PartitionCount": "2",
+                        "ConsumerGroups": [                           
+                            {
+                                "Name": "wiretap"
+                            },
+                            {
+                                "Name": "wiretapakka"
+                            }
+                        ]
+                    }                   
+                ]
+            }
+        ],
+        "LoggingConfig": {
+            "Type": "File"
+        }
+    }
+}

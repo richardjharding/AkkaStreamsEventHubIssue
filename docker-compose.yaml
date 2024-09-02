@@ -1,0 +1,35 @@
+services: 
+  
+  eventhub:
+    image: mcr.microsoft.com/azure-messaging/eventhubs-emulator:latest
+    networks:
+      - poc
+    volumes:
+      - ./EventHubs-Config.json:/Eventhubs_Emulator/ConfigFiles/Config.json
+    ports:
+      - "5672:5672"
+    environment:
+      BLOB_SERVER: azurite
+      METADATA_SERVER: azurite
+      ACCEPT_EULA: Y
+    depends_on:
+      - azurite
+  
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    networks:
+      - poc
+    hostname: azurite
+    volumes:
+      # - ./cert/azurite:/data # required for HTTPS when passing certs
+      - "~/.azurite/eventpoc:/data" # enables bind mount to persist storage data locally
+    # command: "azurite-blob --blobHost 0.0.0.0 -l /data --cert /data/127.0.0.1.pem --key /data/127.0.0.1-key.pem --oauth basic"
+    command: "azurite --blobHost 0.0.0.0 --queueHost 0.0.0.0 --tableHost 0.0.0.0 -l /data"
+    ports:
+      - "10000:10000"
+      - "10001:10001"
+      - "10002:10002"
+
+networks:
+  poc:
+    name: poc
